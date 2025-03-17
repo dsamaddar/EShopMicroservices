@@ -1,4 +1,7 @@
 ﻿using BuildingBlocks.CQRS;
+using Catalog.API.Models;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Catalog.API.Products.CreateProduct
 {
@@ -10,10 +13,24 @@ namespace Catalog.API.Products.CreateProduct
     public record CreateProductResult(Guid Id);
     internal class CreateProductCommandHandler : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
-        public Task<CreateProductResult> Handle(CreateProductCommand request, CancellationToken cancellationToken)
-        {
+        public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+        {   
+            // create product entity from command object
+            var product = new Product  
+            {
+                Name = command.Name,
+                Category = command.Category,
+                Description = command.Description,
+                ImageFile = command.ImageFile,
+                Price = command.Price
+            };
+
+            // save to database
             // business logic to create a product
-            throw new NotImplementedException();
+
+            // return createproductresult result
+
+            return new CreateProductResult(Guid.NewGuid());
         }
     }
 }
